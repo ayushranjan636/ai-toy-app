@@ -50,7 +50,28 @@ void _leaf(Canvas canvas, Offset base, double length, double angle, Color color)
   canvas.restore();
 }
 
-/// Text wordmark used until the supplied logo file is added.
+/// The supplied app logo, shown at its original aspect ratio with gently
+/// rounded corners (as it appears on the home screen).
+class ZivooLogo extends StatelessWidget {
+  const ZivooLogo({super.key, this.size = 40});
+
+  final double size;
+
+  @override
+  Widget build(BuildContext context) => ClipRRect(
+    borderRadius: BorderRadius.circular(size * 0.22),
+    child: Image.asset(
+      'assets/brand/app-icon.png',
+      width: size,
+      height: size,
+      fit: BoxFit.contain,
+      filterQuality: FilterQuality.medium,
+      excludeFromSemantics: true,
+    ),
+  );
+}
+
+/// Brand mark: the supplied Zivoo logo next to the "zivoo" name.
 class ZivooWordmark extends StatelessWidget {
   const ZivooWordmark({super.key, this.size = 28});
 
@@ -65,8 +86,8 @@ class ZivooWordmark extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          LeafMark(size: size * 1.1),
-          SizedBox(width: size * 0.25),
+          ZivooLogo(size: size * 1.4),
+          SizedBox(width: size * 0.35),
           // The wordmark is a logo: it should not grow with body text scaling.
           Text(
             'zivoo',
