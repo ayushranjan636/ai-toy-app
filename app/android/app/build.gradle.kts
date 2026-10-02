@@ -6,7 +6,9 @@ plugins {
 
 android {
     namespace = "com.zivoo.zivoo"
-    compileSdk = flutter.compileSdkVersion
+    // permission_handler_android requires compiling against API 37.
+    // targetSdk/minSdk stay at Flutter defaults (runtime behaviour unchanged).
+    compileSdk = 37
     ndkVersion = flutter.ndkVersion
 
     compileOptions {
