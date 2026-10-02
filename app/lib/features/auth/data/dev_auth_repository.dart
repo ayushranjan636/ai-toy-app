@@ -11,8 +11,13 @@ class DevAuthRepository implements AuthRepository {
     : _dio = dio ?? Dio(BaseOptions(baseUrl: apiBase, contentType: 'application/json'));
 
   final Dio _dio;
-  final Map<String, String> _passwords = {};
-  final Set<String> _verified = {};
+
+  /// Fixed local test account (see backend/scripts/seed_demo.py).
+  static const demoEmail = 'demo@example.com';
+  static const demoPassword = 'zivoo-test-123';
+
+  final Map<String, String> _passwords = {demoEmail: demoPassword};
+  final Set<String> _verified = {demoEmail};
   static const devCode = '123456';
 
   @override

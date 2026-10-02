@@ -68,7 +68,8 @@ class WelcomeScreen extends ConsumerWidget {
                       Padding(
                         padding: const EdgeInsets.only(top: ZSpace.xs),
                         child: Text(
-                          'Development sign-in. Verification code: 123456',
+                          'Development sign-in. Test account: demo@example.com / zivoo-test-123. '
+                          'Verification code: 123456',
                           textAlign: TextAlign.center,
                           style: ZType.caption.copyWith(color: ZColors.muted),
                         ),

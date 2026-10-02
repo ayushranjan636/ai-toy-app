@@ -35,3 +35,4 @@ key.properties
 .env
 .env.*
 !.env.example
+.demo_device_credential
