@@ -1,0 +1,3070 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Zivoo API",
+    "description": "Parent and device APIs for the Zivoo learning toy. All routes are versioned under /v1. Errors use {error: {code, message, details}}.",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/healthz": {
+      "get": {
+        "tags": [
+          "ops"
+        ],
+        "summary": "Healthz",
+        "operationId": "healthz_healthz_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/readyz": {
+      "get": {
+        "tags": [
+          "ops"
+        ],
+        "summary": "Readyz",
+        "operationId": "readyz_readyz_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/me": {
+      "get": {
+        "tags": [
+          "parent"
+        ],
+        "summary": "Get Me",
+        "operationId": "get_me_v1_me_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ParentOut"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "parent"
+        ],
+        "summary": "Update Me",
+        "operationId": "update_me_v1_me_patch",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ParentUpdate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ParentOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/me/delete": {
+      "post": {
+        "tags": [
+          "parent"
+        ],
+        "summary": "Delete Account",
+        "description": "Release devices, delete children (cascades sessions), and mark the\naccount deleted. The identity-provider user must also be deleted by the\nserver-side admin job (see docs/OPERATIONS.md); the app signs out.",
+        "operationId": "delete_account_v1_me_delete_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DeleteAccountIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "202": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/children": {
+      "get": {
+        "tags": [
+          "parent"
+        ],
+        "summary": "List Children",
+        "operationId": "list_children_v1_children_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/ChildOut"
+                  },
+                  "type": "array",
+                  "title": "Response List Children V1 Children Get"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "parent"
+        ],
+        "summary": "Create Child",
+        "operationId": "create_child_v1_children_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChildIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChildOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/children/{child_id}": {
+      "patch": {
+        "tags": [
+          "parent"
+        ],
+        "summary": "Update Child",
+        "operationId": "update_child_v1_children__child_id__patch",
+        "parameters": [
+          {
+            "name": "child_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Child Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChildUpdate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChildOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "parent"
+        ],
+        "summary": "Delete Child",
+        "operationId": "delete_child_v1_children__child_id__delete",
+        "parameters": [
+          {
+            "name": "child_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Child Id"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/children/{child_id}/preferences": {
+      "get": {
+        "tags": [
+          "parent"
+        ],
+        "summary": "Get Child Preferences",
+        "operationId": "get_child_preferences_v1_children__child_id__preferences_get",
+        "parameters": [
+          {
+            "name": "child_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Child Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LearningPreferencesOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "parent"
+        ],
+        "summary": "Put Child Preferences",
+        "operationId": "put_child_preferences_v1_children__child_id__preferences_put",
+        "parameters": [
+          {
+            "name": "child_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Child Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LearningPreferencesIn"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LearningPreferencesOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/devices": {
+      "get": {
+        "tags": [
+          "parent"
+        ],
+        "summary": "List Devices",
+        "operationId": "list_devices_v1_devices_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/DeviceOut"
+                  },
+                  "type": "array",
+                  "title": "Response List Devices V1 Devices Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/devices/{device_id}": {
+      "get": {
+        "tags": [
+          "parent"
+        ],
+        "summary": "Get Device",
+        "operationId": "get_device_v1_devices__device_id__get",
+        "parameters": [
+          {
+            "name": "device_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Device Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeviceOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "parent"
+        ],
+        "summary": "Update Device",
+        "operationId": "update_device_v1_devices__device_id__patch",
+        "parameters": [
+          {
+            "name": "device_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Device Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DeviceUpdate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeviceOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/devices/{device_id}/ownership": {
+      "delete": {
+        "tags": [
+          "parent"
+        ],
+        "summary": "Remove Device",
+        "description": "Remove from this account. The toy can no longer reach this family's\nprofiles, preferences or sessions, and queued commands are cancelled. Its\nown credential is kept so a new owner can set it up with the setup code.\n(Credential revocation is an operations action for compromised units.)",
+        "operationId": "remove_device_v1_devices__device_id__ownership_delete",
+        "parameters": [
+          {
+            "name": "device_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Device Id"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/devices/{device_id}/commands": {
+      "post": {
+        "tags": [
+          "parent"
+        ],
+        "summary": "Send Command",
+        "operationId": "send_command_v1_devices__device_id__commands_post",
+        "parameters": [
+          {
+            "name": "device_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Device Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CommandIn"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CommandOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/devices/{device_id}/commands/{command_id}": {
+      "get": {
+        "tags": [
+          "parent"
+        ],
+        "summary": "Get Command",
+        "operationId": "get_command_v1_devices__device_id__commands__command_id__get",
+        "parameters": [
+          {
+            "name": "device_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Device Id"
+            }
+          },
+          {
+            "name": "command_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Command Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CommandOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/devices/{device_id}/config/resend": {
+      "post": {
+        "tags": [
+          "parent"
+        ],
+        "summary": "Resend Config",
+        "operationId": "resend_config_v1_devices__device_id__config_resend_post",
+        "parameters": [
+          {
+            "name": "device_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Device Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeviceOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/claims": {
+      "post": {
+        "tags": [
+          "parent"
+        ],
+        "summary": "Start Claim",
+        "operationId": "start_claim_v1_claims_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ClaimIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClaimOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/claims/{claim_id}": {
+      "get": {
+        "tags": [
+          "parent"
+        ],
+        "summary": "Get Claim",
+        "operationId": "get_claim_v1_claims__claim_id__get",
+        "parameters": [
+          {
+            "name": "claim_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Claim Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClaimOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/claims/{claim_id}/cancel": {
+      "post": {
+        "tags": [
+          "parent"
+        ],
+        "summary": "Cancel Claim",
+        "operationId": "cancel_claim_v1_claims__claim_id__cancel_post",
+        "parameters": [
+          {
+            "name": "claim_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Claim Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClaimOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/activities": {
+      "get": {
+        "tags": [
+          "parent"
+        ],
+        "summary": "List Activities",
+        "operationId": "list_activities_v1_activities_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/ActivityOut"
+                  },
+                  "type": "array",
+                  "title": "Response List Activities V1 Activities Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/sessions": {
+      "get": {
+        "tags": [
+          "parent"
+        ],
+        "summary": "List Sessions",
+        "operationId": "list_sessions_v1_sessions_get",
+        "parameters": [
+          {
+            "name": "child_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Child Id"
+            }
+          },
+          {
+            "name": "cursor",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Cursor"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 50,
+              "minimum": 1,
+              "default": 20,
+              "title": "Limit"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Page_SessionSummaryOut_"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/sessions/{session_id}": {
+      "get": {
+        "tags": [
+          "parent"
+        ],
+        "summary": "Get Session",
+        "operationId": "get_session_v1_sessions__session_id__get",
+        "parameters": [
+          {
+            "name": "session_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Session Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SessionDetailOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "parent"
+        ],
+        "summary": "Delete Session",
+        "operationId": "delete_session_v1_sessions__session_id__delete",
+        "parameters": [
+          {
+            "name": "session_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Session Id"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/device/claim": {
+      "post": {
+        "tags": [
+          "device"
+        ],
+        "summary": "Device Claim",
+        "operationId": "device_claim_v1_device_claim_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DeviceClaimIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeviceClaimOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/device/heartbeat": {
+      "post": {
+        "tags": [
+          "device"
+        ],
+        "summary": "Heartbeat",
+        "description": "Report status and receive the latest desired config plus pending commands.\n\nProduction transport should be a persistent TLS connection (MQTT/WebSocket);\nthis polling endpoint carries the same messages.",
+        "operationId": "heartbeat_v1_device_heartbeat_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/HeartbeatIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeviceSyncOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/device/commands/{command_id}/ack": {
+      "post": {
+        "tags": [
+          "device"
+        ],
+        "summary": "Ack",
+        "operationId": "ack_v1_device_commands__command_id__ack_post",
+        "parameters": [
+          {
+            "name": "command_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Command Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CommandAckIn"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/device/sessions": {
+      "post": {
+        "tags": [
+          "device"
+        ],
+        "summary": "Start Session",
+        "operationId": "start_session_v1_device_sessions_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ActivityStartIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ToyReplyOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/device/sessions/{client_session_id}/turns": {
+      "post": {
+        "tags": [
+          "device"
+        ],
+        "summary": "Child Turn",
+        "operationId": "child_turn_v1_device_sessions__client_session_id__turns_post",
+        "parameters": [
+          {
+            "name": "client_session_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Client Session Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChildUtteranceIn"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ToyReplyOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/device/sessions/{client_session_id}/end": {
+      "post": {
+        "tags": [
+          "device"
+        ],
+        "summary": "End Session",
+        "description": "Child walked away or interrupted. Idempotent.",
+        "operationId": "end_session_v1_device_sessions__client_session_id__end_post",
+        "parameters": [
+          {
+            "name": "client_session_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Client Session Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ToyReplyOut"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/device/telemetry/latency": {
+      "post": {
+        "tags": [
+          "device"
+        ],
+        "summary": "Latency",
+        "operationId": "latency_v1_device_telemetry_latency_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LatencyBatchIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "202": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ActivityOut": {
+        "properties": {
+          "key": {
+            "type": "string",
+            "title": "Key"
+          },
+          "kind": {
+            "type": "string",
+            "title": "Kind"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "summary": {
+            "type": "string",
+            "title": "Summary"
+          },
+          "min_age": {
+            "type": "integer",
+            "title": "Min Age"
+          },
+          "max_age": {
+            "type": "integer",
+            "title": "Max Age"
+          },
+          "options_schema": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Options Schema"
+          },
+          "assessment_note": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Assessment Note"
+          }
+        },
+        "type": "object",
+        "required": [
+          "key",
+          "kind",
+          "title",
+          "summary",
+          "min_age",
+          "max_age",
+          "options_schema",
+          "assessment_note"
+        ],
+        "title": "ActivityOut"
+      },
+      "ActivityPrefs": {
+        "properties": {
+          "enabled": {
+            "type": "boolean",
+            "title": "Enabled",
+            "default": true
+          },
+          "difficulty": {
+            "type": "string",
+            "enum": [
+              "gentle",
+              "steady",
+              "stretch"
+            ],
+            "title": "Difficulty",
+            "default": "gentle"
+          },
+          "session_minutes": {
+            "type": "integer",
+            "maximum": 20.0,
+            "minimum": 5.0,
+            "title": "Session Minutes",
+            "default": 10
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "ActivityPrefs"
+      },
+      "ActivityStartIn": {
+        "properties": {
+          "client_session_id": {
+            "type": "string",
+            "maxLength": 64,
+            "minLength": 8,
+            "title": "Client Session Id"
+          },
+          "activity_key": {
+            "type": "string",
+            "enum": [
+              "phonics",
+              "vocabulary",
+              "spelling",
+              "maths",
+              "stories"
+            ],
+            "title": "Activity Key"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "client_session_id",
+          "activity_key"
+        ],
+        "title": "ActivityStartIn"
+      },
+      "AssessmentOut": {
+        "properties": {
+          "seq": {
+            "type": "integer",
+            "title": "Seq"
+          },
+          "item_prompt": {
+            "type": "string",
+            "title": "Item Prompt"
+          },
+          "expected": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Expected"
+          },
+          "response_text": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Response Text"
+          },
+          "outcome": {
+            "$ref": "#/components/schemas/Outcome"
+          },
+          "attempt": {
+            "type": "integer",
+            "title": "Attempt"
+          },
+          "source": {
+            "type": "string",
+            "title": "Source"
+          },
+          "source_version": {
+            "type": "string",
+            "title": "Source Version"
+          },
+          "confidence": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Confidence"
+          }
+        },
+        "type": "object",
+        "required": [
+          "seq",
+          "item_prompt",
+          "expected",
+          "response_text",
+          "outcome",
+          "attempt",
+          "source",
+          "source_version",
+          "confidence"
+        ],
+        "title": "AssessmentOut"
+      },
+      "ChildIn": {
+        "properties": {
+          "display_name": {
+            "type": "string",
+            "maxLength": 40,
+            "minLength": 1,
+            "title": "Display Name"
+          },
+          "birth_year": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "maximum": 2030.0,
+                "minimum": 2010.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Birth Year"
+          },
+          "language": {
+            "type": "string",
+            "enum": [
+              "en-GB",
+              "en-US",
+              "en-IN"
+            ],
+            "title": "Language",
+            "default": "en-GB"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "display_name"
+        ],
+        "title": "ChildIn"
+      },
+      "ChildOut": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "display_name": {
+            "type": "string",
+            "title": "Display Name"
+          },
+          "birth_year": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Birth Year"
+          },
+          "language": {
+            "type": "string",
+            "title": "Language"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "display_name",
+          "birth_year",
+          "language",
+          "created_at"
+        ],
+        "title": "ChildOut"
+      },
+      "ChildUpdate": {
+        "properties": {
+          "display_name": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 40,
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Display Name"
+          },
+          "birth_year": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "maximum": 2030.0,
+                "minimum": 2010.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Birth Year"
+          },
+          "language": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "en-GB",
+                  "en-US",
+                  "en-IN"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Language"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "ChildUpdate"
+      },
+      "ChildUtteranceIn": {
+        "properties": {
+          "turn_id": {
+            "type": "string",
+            "maxLength": 64,
+            "minLength": 1,
+            "title": "Turn Id"
+          },
+          "transcript": {
+            "type": "string",
+            "maxLength": 400,
+            "title": "Transcript"
+          },
+          "stt_confidence": {
+            "anyOf": [
+              {
+                "type": "number",
+                "maximum": 1.0,
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Stt Confidence"
+          },
+          "audio_quality": {
+            "type": "string",
+            "enum": [
+              "good",
+              "noisy",
+              "clipped",
+              "silent"
+            ],
+            "title": "Audio Quality",
+            "default": "good"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "turn_id",
+          "transcript"
+        ],
+        "title": "ChildUtteranceIn",
+        "description": "What the toy heard. Text comes from on-cloud STT; confidence from that STT."
+      },
+      "ClaimIn": {
+        "properties": {
+          "serial": {
+            "type": "string",
+            "maxLength": 64,
+            "minLength": 4,
+            "title": "Serial"
+          },
+          "setup_code": {
+            "type": "string",
+            "maxLength": 32,
+            "minLength": 8,
+            "title": "Setup Code"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "serial",
+          "setup_code"
+        ],
+        "title": "ClaimIn"
+      },
+      "ClaimOut": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "status": {
+            "$ref": "#/components/schemas/ClaimStatus"
+          },
+          "expires_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Expires At"
+          },
+          "device_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Device Id"
+          },
+          "failure_reason": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Failure Reason"
+          },
+          "claim_token": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Claim Token"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "status",
+          "expires_at"
+        ],
+        "title": "ClaimOut"
+      },
+      "ClaimStatus": {
+        "type": "string",
+        "enum": [
+          "pending",
+          "completed",
+          "expired",
+          "cancelled",
+          "failed"
+        ],
+        "title": "ClaimStatus"
+      },
+      "CommandAckIn": {
+        "properties": {
+          "result": {
+            "type": "string",
+            "enum": [
+              "ok",
+              "failed"
+            ],
+            "title": "Result"
+          },
+          "error": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 120
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Error"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "result"
+        ],
+        "title": "CommandAckIn"
+      },
+      "CommandIn": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id",
+            "description": "Client-generated idempotency key"
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "play_greeting",
+              "enter_wifi_setup",
+              "factory_reset",
+              "check_firmware"
+            ],
+            "title": "Kind"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "id",
+          "kind"
+        ],
+        "title": "CommandIn"
+      },
+      "CommandKind": {
+        "type": "string",
+        "enum": [
+          "apply_config",
+          "play_greeting",
+          "enter_wifi_setup",
+          "factory_reset",
+          "check_firmware"
+        ],
+        "title": "CommandKind"
+      },
+      "CommandOut": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "kind": {
+            "$ref": "#/components/schemas/CommandKind"
+          },
+          "status": {
+            "$ref": "#/components/schemas/CommandStatus"
+          },
+          "config_version": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Config Version"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "acked_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Acked At"
+          },
+          "error": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Error"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "kind",
+          "status",
+          "config_version",
+          "created_at",
+          "acked_at",
+          "error"
+        ],
+        "title": "CommandOut"
+      },
+      "CommandStatus": {
+        "type": "string",
+        "enum": [
+          "pending",
+          "delivered",
+          "acknowledged",
+          "failed",
+          "expired"
+        ],
+        "title": "CommandStatus"
+      },
+      "DeleteAccountIn": {
+        "properties": {
+          "confirm": {
+            "type": "string",
+            "const": "DELETE",
+            "title": "Confirm"
+          }
+        },
+        "type": "object",
+        "required": [
+          "confirm"
+        ],
+        "title": "DeleteAccountIn"
+      },
+      "DeviceClaimIn": {
+        "properties": {
+          "claim_token": {
+            "type": "string",
+            "maxLength": 128,
+            "minLength": 10,
+            "title": "Claim Token"
+          },
+          "firmware_version": {
+            "type": "string",
+            "maxLength": 32,
+            "title": "Firmware Version"
+          },
+          "wifi_ssid": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 64
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Wifi Ssid"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "claim_token",
+          "firmware_version"
+        ],
+        "title": "DeviceClaimIn"
+      },
+      "DeviceClaimOut": {
+        "properties": {
+          "device_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Device Id"
+          },
+          "credential": {
+            "type": "string",
+            "title": "Credential"
+          },
+          "desired_config_version": {
+            "type": "integer",
+            "title": "Desired Config Version"
+          }
+        },
+        "type": "object",
+        "required": [
+          "device_id",
+          "credential",
+          "desired_config_version"
+        ],
+        "title": "DeviceClaimOut"
+      },
+      "DeviceCommandOut": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "kind": {
+            "$ref": "#/components/schemas/CommandKind"
+          },
+          "payload": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Payload"
+          },
+          "config_version": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Config Version"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "kind",
+          "payload",
+          "config_version"
+        ],
+        "title": "DeviceCommandOut"
+      },
+      "DeviceOut": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "serial": {
+            "type": "string",
+            "title": "Serial"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "online": {
+            "type": "boolean",
+            "title": "Online"
+          },
+          "last_seen_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Last Seen At"
+          },
+          "firmware_version": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Firmware Version"
+          },
+          "firmware_update_available": {
+            "type": "boolean",
+            "title": "Firmware Update Available"
+          },
+          "wifi_ssid": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Wifi Ssid"
+          },
+          "active_child_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Active Child Id"
+          },
+          "desired_config_version": {
+            "type": "integer",
+            "title": "Desired Config Version"
+          },
+          "applied_config_version": {
+            "type": "integer",
+            "title": "Applied Config Version"
+          },
+          "config_sync": {
+            "type": "string",
+            "enum": [
+              "applied",
+              "pending",
+              "failed",
+              "none"
+            ],
+            "title": "Config Sync"
+          },
+          "is_simulated": {
+            "type": "boolean",
+            "title": "Is Simulated"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "serial",
+          "name",
+          "online",
+          "last_seen_at",
+          "firmware_version",
+          "firmware_update_available",
+          "wifi_ssid",
+          "active_child_id",
+          "desired_config_version",
+          "applied_config_version",
+          "config_sync",
+          "is_simulated"
+        ],
+        "title": "DeviceOut"
+      },
+      "DeviceSyncOut": {
+        "properties": {
+          "desired_config_version": {
+            "type": "integer",
+            "title": "Desired Config Version"
+          },
+          "config": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Config"
+          },
+          "commands": {
+            "items": {
+              "$ref": "#/components/schemas/DeviceCommandOut"
+            },
+            "type": "array",
+            "title": "Commands"
+          }
+        },
+        "type": "object",
+        "required": [
+          "desired_config_version",
+          "config",
+          "commands"
+        ],
+        "title": "DeviceSyncOut"
+      },
+      "DeviceUpdate": {
+        "properties": {
+          "name": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 40,
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Name"
+          },
+          "active_child_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Active Child Id"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "DeviceUpdate"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "HeartbeatIn": {
+        "properties": {
+          "firmware_version": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 32
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Firmware Version"
+          },
+          "wifi_ssid": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 64
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Wifi Ssid"
+          },
+          "applied_config_version": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Applied Config Version"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "HeartbeatIn"
+      },
+      "LatencyBatchIn": {
+        "properties": {
+          "samples": {
+            "items": {
+              "$ref": "#/components/schemas/LatencyIn"
+            },
+            "type": "array",
+            "maxItems": 200,
+            "title": "Samples"
+          }
+        },
+        "type": "object",
+        "required": [
+          "samples"
+        ],
+        "title": "LatencyBatchIn"
+      },
+      "LatencyIn": {
+        "properties": {
+          "metric": {
+            "type": "string",
+            "enum": [
+              "speech_end_to_first_audio",
+              "stt",
+              "assessment",
+              "response_generation",
+              "tts_first_audio",
+              "reconnect",
+              "network_failure"
+            ],
+            "title": "Metric"
+          },
+          "value_ms": {
+            "type": "number",
+            "maximum": 600000.0,
+            "minimum": 0.0,
+            "title": "Value Ms"
+          },
+          "conditions": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 120
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Conditions"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "metric",
+          "value_ms"
+        ],
+        "title": "LatencyIn"
+      },
+      "LearningPreferencesIn": {
+        "properties": {
+          "base_version": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Base Version",
+            "description": "Version the client edited (optimistic)"
+          },
+          "daily_limit_minutes": {
+            "type": "integer",
+            "maximum": 120.0,
+            "minimum": 10.0,
+            "title": "Daily Limit Minutes",
+            "default": 30
+          },
+          "quiet_start": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^\\d{2}:\\d{2}$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Quiet Start"
+          },
+          "quiet_end": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^\\d{2}:\\d{2}$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Quiet End"
+          },
+          "activities": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/ActivityPrefs"
+            },
+            "propertyNames": {
+              "enum": [
+                "phonics",
+                "vocabulary",
+                "spelling",
+                "maths",
+                "stories"
+              ]
+            },
+            "type": "object",
+            "title": "Activities"
+          },
+          "maths": {
+            "$ref": "#/components/schemas/MathsOptions",
+            "default": {
+              "operations": [
+                "addition"
+              ],
+              "max_number": 10
+            }
+          },
+          "spelling": {
+            "$ref": "#/components/schemas/SpellingOptions",
+            "default": {
+              "words": []
+            }
+          },
+          "phonics": {
+            "$ref": "#/components/schemas/PhonicsOptions",
+            "default": {
+              "sounds": [
+                "s",
+                "a",
+                "t"
+              ]
+            }
+          },
+          "vocabulary": {
+            "$ref": "#/components/schemas/VocabularyOptions",
+            "default": {
+              "themes": [
+                "animals"
+              ]
+            }
+          },
+          "stories": {
+            "$ref": "#/components/schemas/StoryOptions",
+            "default": {
+              "stories": [
+                "the-lost-acorn"
+              ]
+            }
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "LearningPreferencesIn",
+        "description": "Full preferences document; the client sends the whole thing with base_version."
+      },
+      "LearningPreferencesOut": {
+        "properties": {
+          "version": {
+            "type": "integer",
+            "title": "Version"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Updated At"
+          },
+          "payload": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Payload"
+          }
+        },
+        "type": "object",
+        "required": [
+          "version",
+          "updated_at",
+          "payload"
+        ],
+        "title": "LearningPreferencesOut"
+      },
+      "MathsOptions": {
+        "properties": {
+          "operations": {
+            "items": {
+              "type": "string",
+              "enum": [
+                "addition",
+                "subtraction"
+              ]
+            },
+            "type": "array",
+            "title": "Operations",
+            "default": [
+              "addition"
+            ]
+          },
+          "max_number": {
+            "type": "integer",
+            "enum": [
+              5,
+              10,
+              20,
+              50,
+              100
+            ],
+            "title": "Max Number",
+            "default": 10
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "MathsOptions"
+      },
+      "OnboardingStep": {
+        "type": "string",
+        "enum": [
+          "verify_email",
+          "intro",
+          "connect_toy",
+          "child_profile",
+          "preferences",
+          "done"
+        ],
+        "title": "OnboardingStep"
+      },
+      "Outcome": {
+        "type": "string",
+        "enum": [
+          "correct",
+          "needs_practice",
+          "uncertain"
+        ],
+        "title": "Outcome"
+      },
+      "Page_SessionSummaryOut_": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/SessionSummaryOut"
+            },
+            "type": "array",
+            "title": "Items"
+          },
+          "next_cursor": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Next Cursor"
+          }
+        },
+        "type": "object",
+        "required": [
+          "items"
+        ],
+        "title": "Page[SessionSummaryOut]"
+      },
+      "ParentOut": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "email": {
+            "type": "string",
+            "title": "Email"
+          },
+          "display_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Display Name"
+          },
+          "marketing_opt_in": {
+            "type": "boolean",
+            "title": "Marketing Opt In"
+          },
+          "store_transcripts": {
+            "type": "boolean",
+            "title": "Store Transcripts"
+          },
+          "product_analytics": {
+            "type": "boolean",
+            "title": "Product Analytics"
+          },
+          "data_choices_confirmed": {
+            "type": "boolean",
+            "title": "Data Choices Confirmed"
+          },
+          "onboarding_step": {
+            "$ref": "#/components/schemas/OnboardingStep"
+          },
+          "notify_session_summaries": {
+            "type": "boolean",
+            "title": "Notify Session Summaries"
+          },
+          "notify_device_offline": {
+            "type": "boolean",
+            "title": "Notify Device Offline"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "email",
+          "display_name",
+          "marketing_opt_in",
+          "store_transcripts",
+          "product_analytics",
+          "data_choices_confirmed",
+          "onboarding_step",
+          "notify_session_summaries",
+          "notify_device_offline"
+        ],
+        "title": "ParentOut"
+      },
+      "ParentUpdate": {
+        "properties": {
+          "display_name": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 80
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Display Name"
+          },
+          "marketing_opt_in": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Marketing Opt In"
+          },
+          "store_transcripts": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Store Transcripts"
+          },
+          "product_analytics": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Product Analytics"
+          },
+          "data_choices_confirmed": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Data Choices Confirmed"
+          },
+          "onboarding_step": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/OnboardingStep"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "notify_session_summaries": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Notify Session Summaries"
+          },
+          "notify_device_offline": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Notify Device Offline"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "ParentUpdate"
+      },
+      "PhonicsOptions": {
+        "properties": {
+          "sounds": {
+            "items": {
+              "type": "string",
+              "enum": [
+                "s",
+                "a",
+                "t",
+                "p",
+                "i",
+                "n",
+                "m",
+                "d",
+                "sh",
+                "ch",
+                "th",
+                "ng",
+                "ai",
+                "ee"
+              ]
+            },
+            "type": "array",
+            "title": "Sounds",
+            "default": [
+              "s",
+              "a",
+              "t"
+            ]
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "PhonicsOptions"
+      },
+      "SessionDetailOut": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "child_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Child Id"
+          },
+          "activity_key": {
+            "type": "string",
+            "title": "Activity Key"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "started_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Started At"
+          },
+          "ended_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Ended At"
+          },
+          "summary": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Summary"
+          },
+          "correct": {
+            "type": "integer",
+            "title": "Correct"
+          },
+          "needs_practice": {
+            "type": "integer",
+            "title": "Needs Practice"
+          },
+          "uncertain": {
+            "type": "integer",
+            "title": "Uncertain"
+          },
+          "assessments": {
+            "items": {
+              "$ref": "#/components/schemas/AssessmentOut"
+            },
+            "type": "array",
+            "title": "Assessments"
+          },
+          "turns": {
+            "items": {
+              "$ref": "#/components/schemas/TurnOut"
+            },
+            "type": "array",
+            "title": "Turns"
+          },
+          "transcripts_available": {
+            "type": "boolean",
+            "title": "Transcripts Available"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "child_id",
+          "activity_key",
+          "status",
+          "started_at",
+          "ended_at",
+          "summary",
+          "correct",
+          "needs_practice",
+          "uncertain",
+          "assessments",
+          "turns",
+          "transcripts_available"
+        ],
+        "title": "SessionDetailOut"
+      },
+      "SessionSummaryOut": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "child_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Child Id"
+          },
+          "activity_key": {
+            "type": "string",
+            "title": "Activity Key"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "started_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Started At"
+          },
+          "ended_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Ended At"
+          },
+          "summary": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Summary"
+          },
+          "correct": {
+            "type": "integer",
+            "title": "Correct"
+          },
+          "needs_practice": {
+            "type": "integer",
+            "title": "Needs Practice"
+          },
+          "uncertain": {
+            "type": "integer",
+            "title": "Uncertain"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "child_id",
+          "activity_key",
+          "status",
+          "started_at",
+          "ended_at",
+          "summary",
+          "correct",
+          "needs_practice",
+          "uncertain"
+        ],
+        "title": "SessionSummaryOut"
+      },
+      "SpellingOptions": {
+        "properties": {
+          "words": {
+            "items": {
+              "type": "string",
+              "pattern": "^[A-Za-z]{2,12}$"
+            },
+            "type": "array",
+            "maxItems": 20,
+            "title": "Words"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "SpellingOptions"
+      },
+      "StoryOptions": {
+        "properties": {
+          "stories": {
+            "items": {
+              "type": "string",
+              "enum": [
+                "the-lost-acorn",
+                "moon-garden",
+                "river-boat"
+              ]
+            },
+            "type": "array",
+            "title": "Stories",
+            "default": [
+              "the-lost-acorn"
+            ]
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "StoryOptions"
+      },
+      "ToyReplyOut": {
+        "properties": {
+          "state": {
+            "type": "string",
+            "title": "State"
+          },
+          "say": {
+            "type": "string",
+            "title": "Say"
+          },
+          "outcome": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Outcome"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "done": {
+            "type": "boolean",
+            "title": "Done",
+            "default": false
+          }
+        },
+        "type": "object",
+        "required": [
+          "state",
+          "say"
+        ],
+        "title": "ToyReplyOut"
+      },
+      "TurnOut": {
+        "properties": {
+          "seq": {
+            "type": "integer",
+            "title": "Seq"
+          },
+          "speaker": {
+            "type": "string",
+            "title": "Speaker"
+          },
+          "text": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Text"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "seq",
+          "speaker",
+          "text",
+          "created_at"
+        ],
+        "title": "TurnOut"
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          },
+          "input": {
+            "title": "Input"
+          },
+          "ctx": {
+            "type": "object",
+            "title": "Context"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
+      },
+      "VocabularyOptions": {
+        "properties": {
+          "themes": {
+            "items": {
+              "type": "string",
+              "enum": [
+                "animals",
+                "food",
+                "home",
+                "nature",
+                "feelings",
+                "transport"
+              ]
+            },
+            "type": "array",
+            "title": "Themes",
+            "default": [
+              "animals"
+            ]
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "VocabularyOptions"
+      }
+    }
+  }
+}
